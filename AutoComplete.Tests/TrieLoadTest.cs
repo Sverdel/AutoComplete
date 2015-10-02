@@ -23,7 +23,7 @@ namespace AutoComplete.Tests
                     long StopBytes = 0;
                     long StartBytes = GC.GetTotalMemory(true);
 
-                    var result = Trie.LoadTrie(reader);
+                    var result = TrieLoader.LoadTrie(reader).Result;
 
                     StopBytes = GC.GetTotalMemory(true);
 
