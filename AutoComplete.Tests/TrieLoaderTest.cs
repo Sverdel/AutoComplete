@@ -6,12 +6,13 @@ using System.IO;
 namespace AutoComplete.Tests
 {
     [TestClass]
-    public class TrieLoadTest
+    public class TrieLoaderTest
     {
         [TestMethod]
-        public void TestMethod1()
+        public void LoadTest()
         {
             Stopwatch sw = Stopwatch.StartNew();
+            int found = 0, notfound = 0;
             TrieLoader loaader = new TrieLoader();
 
             FileInfo file = new FileInfo("test.in");
@@ -20,49 +21,36 @@ namespace AutoComplete.Tests
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    long StopBytes = 0;
-                    long StartBytes = GC.GetTotalMemory(true);
-
                     var result = TrieLoader.LoadTrie(reader).Result;
-
-                    StopBytes = GC.GetTotalMemory(true);
-
-                    Console.WriteLine("Size is " + ((StopBytes - StartBytes)).ToString());
-
                     string currentLine = reader.ReadLine();
                     int count = 0;
 
                     count = int.Parse(currentLine);
-                    int good = 0, bad = 0;
+                    
                     for (int i = 0; i < count; i++)
                     {
                         currentLine = reader.ReadLine();
                         if (result.Get(currentLine) == null)
                         {
-                            bad++;
+                            notfound++;
                         }
                         else
                         {
-                            good++;
+                            found++;
                         }
                     }
 
-                    Console.WriteLine("{0}, {1}", good, bad);
+                    Console.WriteLine("{0}, {1}", found, notfound);
                 }
             }
 
             sw.Stop();
             Console.WriteLine(sw.Elapsed);
             Assert.IsTrue(sw.Elapsed < TimeSpan.FromSeconds(10), "Не уложились по времени выполнения");
+
+            Assert.AreEqual(9379, found, "Не совпало количество найденных слов");
+            Assert.AreEqual(5621, notfound, "Не совпало количество ненайденных слов");
         }
-
-        private Trie LoadTrie(string path)
-        {
-            Trie result = null;
-
-            
-
-            return result;
-        }
+        
     }
 }

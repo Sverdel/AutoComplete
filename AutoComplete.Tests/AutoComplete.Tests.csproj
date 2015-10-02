@@ -50,8 +50,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="TrieLoadTest.cs" />
+    <Compile Include="TrieLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TrieTests.cs" />
+    <Compile Include="TrieNodeTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoComplete\AutoComplete.csproj">

@@ -26,17 +26,31 @@ namespace AutoComplete
         /// <param name="occurrence">встречаемость</param>
         public void Add(string word, int occurrence)
         {
+            if (string.IsNullOrEmpty(word))
+                throw new ArgumentNullException("Incorrect input word");
+
+            if (occurrence <= 0)
+                throw new ArgumentException("Occurrence bust greater than 0");
+
             TrieNode current = _root;
             foreach (char keyPart in word)
             {
-                if (!current.Childs.ContainsKey(keyPart))
+                if (!current.Leaves.ContainsKey(keyPart))
                 {
-                    current.Childs.Add(keyPart, new TrieNode());
+                    current.Leaves.Add(keyPart, new TrieNode());
                 }
 
-                current = current.Childs[keyPart];
-                current.AddChildWord(word, occurrence);
+                current = current.Leaves[keyPart];
+
+                if (current.CurrentWord == word)
+                {
+                    throw new ArgumentException("Current word is already exists");
+                }
+
+                current.AddWord(word, occurrence);
             }
+
+            current.CurrentWord = word;
         }
 
         /// <summary>
@@ -46,18 +60,21 @@ namespace AutoComplete
         /// <returns></returns>
         public IEnumerable<string> Get(string substring)
         {
+            if (string.IsNullOrEmpty(substring))
+                throw new ArgumentNullException("Incorrect input word");
+
             TrieNode current = _root;
             foreach (char keyPart in substring)
             {
-                if (!current.Childs.ContainsKey(keyPart))
+                if (!current.Leaves.ContainsKey(keyPart))
                 {
                     return null;
                 }
 
-                current = current.Childs[keyPart];
+                current = current.Leaves[keyPart];
             }
 
-            return current.GetWords();
+            return current.Words;
         }
 
     }
