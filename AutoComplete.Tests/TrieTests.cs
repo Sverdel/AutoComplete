@@ -60,6 +60,14 @@ namespace AutoComplete.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
+        public void TrieAddTest_UpperCaseWord()
+        {
+            Trie dictioanry = new Trie();
+            dictioanry.Add("Test", 100);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void TrieAddTest_LessZero()
         {
             Trie dictioanry = new Trie();
@@ -73,6 +81,18 @@ namespace AutoComplete.Tests
             dictioanry.Add("a", 100);
 
             var result = dictioanry.Get("a");
+
+            Assert.IsNotNull(result, "did not found word");
+            Assert.AreEqual(1, result.Count(), "Incorrect words count");
+        }
+
+        [TestMethod]
+        public void GetTest_UpperCase()
+        {
+            Trie dictioanry = new Trie();
+            dictioanry.Add("a", 100);
+
+            var result = dictioanry.Get("A");
 
             Assert.IsNotNull(result, "did not found word");
             Assert.AreEqual(1, result.Count(), "Incorrect words count");

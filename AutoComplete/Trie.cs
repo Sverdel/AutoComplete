@@ -27,8 +27,12 @@ namespace AutoComplete
             if (string.IsNullOrEmpty(word))
                 throw new ArgumentNullException("Incorrect input word");
 
+            if (word.ToLower() != word)
+                throw new ArgumentException("Word must be in lowwer case");
+
             if (occurrence <= 0)
                 throw new ArgumentException("Occurrence bust greater than 0");
+
 
             TrieNode current = _root;
             foreach (char keyPart in word)
@@ -61,8 +65,9 @@ namespace AutoComplete
             if (string.IsNullOrEmpty(substring))
                 throw new ArgumentException("Incorrect input substring");
 
+            string lowwerString = substring.ToLower();
             TrieNode current = _root;
-            foreach (char keyPart in substring)
+            foreach (char keyPart in lowwerString)
             {
                 if (!current.Leaves.ContainsKey(keyPart))
                 {
