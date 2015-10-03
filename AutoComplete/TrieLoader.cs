@@ -32,7 +32,12 @@ namespace AutoComplete
             for (int i = 0; i < wordsCount; i++)
             {
                 currentLine = await reader.ReadLineAsync();
-                string[] current = currentLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries); ;
+                if (string.IsNullOrEmpty(currentLine))
+                {
+                    throw new FormatException("Incorrect input data format. Too less lines or empty line");
+                }
+
+                string[] current = currentLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries); 
                 if (current.Length != 2)
                 {
                     throw new FormatException("Incorrect input data format. Rows with words must contains word and occurrence delimeted by space");

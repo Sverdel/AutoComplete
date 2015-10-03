@@ -146,5 +146,32 @@ namespace AutoComplete.Tests
             }
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TrieLoaderTest_TooLessLines()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine("5");
+                writer.WriteLine("test 10");
+                writer.Flush();
+
+                stream.Position = 0;
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    try
+                    {
+                        var result = TrieLoader.LoadAsync(reader).Result;
+                    }
+                    catch (AggregateException ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
+            }
+        }
+
     }
 }
