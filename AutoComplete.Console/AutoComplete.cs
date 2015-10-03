@@ -20,7 +20,7 @@ namespace AutoComplete.ConsoleApp
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {
-                        dictionary = await TrieLoader.LoadTrie(reader);
+                        dictionary = await TrieLoader.Load(reader);
 
                         string currentLine = reader.ReadLine();
                         int count = 0;

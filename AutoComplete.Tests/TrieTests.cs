@@ -43,6 +43,30 @@ namespace AutoComplete.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TrieAddTest_NullWord()
+        {
+            Trie dictioanry = new Trie();
+            dictioanry.Add(null, 100);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void TrieAddTest_EmptyWord()
+        {
+            Trie dictioanry = new Trie();
+            dictioanry.Add(string.Empty, 100);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TrieAddTest_LessZero()
+        {
+            Trie dictioanry = new Trie();
+            dictioanry.Add("Test", -100);
+        }
+
+        [TestMethod]
         public void GetTest_Single()
         {
             Trie dictioanry = new Trie();
@@ -52,6 +76,14 @@ namespace AutoComplete.Tests
 
             Assert.IsNotNull(result, "did not found word");
             Assert.AreEqual(1, result.Count(), "Incorrect words count");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetTest_NullWord()
+        {
+            Trie dictioanry = new Trie();
+            dictioanry.Get(null);
         }
 
         [TestMethod]
@@ -76,12 +108,15 @@ namespace AutoComplete.Tests
             dictioanry.Add(input[2], 300);
             dictioanry.Add(input[3], 400);
 
-            var result = dictioanry.Get("a");
+            var result = dictioanry.Get("a").ToList();
 
             Assert.IsNotNull(result, "did not found word");
-            Assert.AreEqual(3, result.Count(), "Incorrect words count");
+            Assert.AreEqual(3, result.Count, "Incorrect words count");
 
-            
+            for (int i = 0; i < result.Count; i++)
+            {
+                Assert.AreEqual(input[2 - i], result[i], "Incorrect word. " + i);
+            }
             
         }
     }

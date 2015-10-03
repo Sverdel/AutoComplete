@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("AutoComplete.Tests")]
 namespace AutoComplete
 {
     public sealed class Trie
@@ -61,7 +59,7 @@ namespace AutoComplete
         public IEnumerable<string> Get(string substring)
         {
             if (string.IsNullOrEmpty(substring))
-                throw new ArgumentNullException("Incorrect input word");
+                throw new ArgumentException("Incorrect input substring");
 
             TrieNode current = _root;
             foreach (char keyPart in substring)

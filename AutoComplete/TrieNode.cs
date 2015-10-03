@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("AutoComplete.Tests")]
 namespace AutoComplete
 {
-    public sealed class TrieNode
+    internal sealed class TrieNode
     {
         /// <summary>
         /// Ограничение на размер списка слов
@@ -32,19 +30,19 @@ namespace AutoComplete
         private SortedList<KeyValuePair<int, string>, string> _words;
 
         /// <summary>
-        /// 
+        /// Слово, добавленное в словарь
         /// </summary>
-        public string CurrentWord { get; set; }
+        internal string CurrentWord { get; set; }
 
         /// <summary>
         /// Листовые элементы
         /// </summary>
-        public Dictionary<char, TrieNode> Leaves { get; private set; }
+        internal Dictionary<char, TrieNode> Leaves { get; private set; }
 
         /// <summary>
         /// Интерфейс для получения отсортированного списка слов по введенной подстроке
         /// </summary>
-        public IEnumerable<string> Words { get { return _words.Values; } }
+        internal IEnumerable<string> Words { get { return _words.Values; } }
 
         /// <summary>
         /// 
@@ -57,11 +55,10 @@ namespace AutoComplete
 
         /// <summary>
         /// Добавляем слово в отсортированный список.
-        /// Для 
         /// </summary>
         /// <param name="word"></param>
         /// <param name="occurrence"></param>
-        public void AddWord(string word, int occurrence)
+        internal void AddWord(string word, int occurrence)
         {
             if (string.IsNullOrEmpty(word))
                 throw new ArgumentNullException("Incorrect input word");
