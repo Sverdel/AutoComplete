@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AutoComplete.ConsoleApp
@@ -20,7 +18,7 @@ namespace AutoComplete.ConsoleApp
                 {
                     using (StreamReader reader = new StreamReader(stream))
                     {
-                        dictionary = await TrieLoader.Load(reader);
+                        dictionary = await TrieLoader.LoadAsync(reader);
 
                         string currentLine = reader.ReadLine();
                         int count = 0;
@@ -58,9 +56,6 @@ namespace AutoComplete.ConsoleApp
             {
                     Console.WriteLine(word);
             }
-
-
-            Console.ReadLine();
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoComplete;
 
 namespace AutoComplete.Tests
 {
@@ -71,7 +67,7 @@ namespace AutoComplete.Tests
         public void TrieAddTest_LessZero()
         {
             Trie dictioanry = new Trie();
-            dictioanry.Add("Test", -100);
+            dictioanry.Add("test", -100);
         }
 
         [TestMethod]

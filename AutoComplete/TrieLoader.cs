@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AutoComplete
@@ -15,7 +12,7 @@ namespace AutoComplete
         /// </summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static async Task<Trie> Load(StreamReader reader)
+        public static async Task<Trie> LoadAsync(StreamReader reader)
         {
             if (reader == null || reader.EndOfStream)
             {
@@ -35,7 +32,7 @@ namespace AutoComplete
             for (int i = 0; i < wordsCount; i++)
             {
                 currentLine = await reader.ReadLineAsync();
-                string[] current = currentLine.Split(' ');
+                string[] current = currentLine.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries); ;
                 if (current.Length != 2)
                 {
                     throw new FormatException("Incorrect input data format. Rows with words must contains word and occurrence delimeted by space");

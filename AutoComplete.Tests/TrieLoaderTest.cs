@@ -19,13 +19,13 @@ namespace AutoComplete.Tests
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    long StopBytes = 0;
+                    long stopBytes = 0;
 
-                    long StartBytes = GC.GetTotalMemory(true);
-                    var result = TrieLoader.Load(reader).Result;
-                    StopBytes = GC.GetTotalMemory(true);
+                    long startBytes = GC.GetTotalMemory(true);
+                    var result = TrieLoader.LoadAsync(reader).Result;
+                    stopBytes = GC.GetTotalMemory(true);
 
-                    Console.WriteLine("Size is " + ((long)(StopBytes - StartBytes)).ToString());
+                    Console.WriteLine("Size is " + ((long)(stopBytes - startBytes)).ToString());
 
                     string currentLine = reader.ReadLine();
                     int count = 0;
@@ -63,7 +63,7 @@ namespace AutoComplete.Tests
         {
             try
             {
-                var result = TrieLoader.Load(null).Result;
+                var result = TrieLoader.LoadAsync(null).Result;
             }
             catch (AggregateException ex)
             {
@@ -83,7 +83,7 @@ namespace AutoComplete.Tests
 
                     try
                     {
-                        var result = TrieLoader.Load(reader).Result;
+                        var result = TrieLoader.LoadAsync(reader).Result;
                     }
                     catch (AggregateException ex)
                     {
@@ -109,7 +109,7 @@ namespace AutoComplete.Tests
                 {
                     try
                     {
-                        var result = TrieLoader.Load(reader).Result;
+                        var result = TrieLoader.LoadAsync(reader).Result;
                     }
                     catch (AggregateException ex)
                     {
@@ -136,7 +136,7 @@ namespace AutoComplete.Tests
                 {
                     try
                     {
-                        var result = TrieLoader.Load(reader).Result;
+                        var result = TrieLoader.LoadAsync(reader).Result;
                     }
                     catch (AggregateException ex)
                     {
