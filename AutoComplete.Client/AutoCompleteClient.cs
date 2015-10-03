@@ -133,7 +133,7 @@ namespace AutoComplete.Client
 
             await networkStream.WriteAsync(requestBytes, 0, requestBytes.Length);
 
-            var buffer = new byte[4096];
+            var buffer = new byte[8192];
             var byteCount = await networkStream.ReadAsync(buffer, 0, buffer.Length);
             return Encoding.ASCII.GetString(buffer, 0, byteCount);
             
