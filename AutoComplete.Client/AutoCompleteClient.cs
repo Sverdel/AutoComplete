@@ -28,7 +28,7 @@ namespace AutoComplete.Client
         {
             if (!ParseCommandArgs(args))
             {
-                Console.WriteLine("Press any key to exit");
+                Console.WriteLine("[Client] Press any key to exit");
                 Console.ReadKey();
                 return;
             }
@@ -84,7 +84,7 @@ namespace AutoComplete.Client
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unexcpected exception: " + ex.Message);
+                Console.WriteLine("[Client] Unexcpected exception: " + ex.Message);
                 _exitEvent.Set();
             }
         }

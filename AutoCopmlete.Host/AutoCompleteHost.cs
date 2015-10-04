@@ -17,7 +17,7 @@ namespace AutoCopmlete.Host
         private static Trie _dictionary;
 
         /// <summary>
-        /// Порт, на котором поднимам хост
+        /// Порт, на котором поднимаем tcp-хост
         /// </summary>
         private static int _port;
 
@@ -35,7 +35,7 @@ namespace AutoCopmlete.Host
         {
             if (!ParseCommandArgs(args))
             {
-                Console.WriteLine("Press any key to exit");
+                Console.WriteLine("[Server] Press any key to exit");
                 Console.ReadKey();
                 return;
             }
@@ -43,13 +43,11 @@ namespace AutoCopmlete.Host
             _exitEvent = new ManualResetEvent(false);
             Console.CancelKeyPress += (sender, e) => _exitEvent.Set(); 
 
-            Stopwatch sw = Stopwatch.StartNew();
             Console.WriteLine("[Server] Begin initialization");
             InitDictionaryAsync().Wait();
-            Console.WriteLine("[Server] Initialization complete. Elapsed: {0}", sw.Elapsed);
-
+            
             StartListenerAsync();
-            Console.WriteLine("[Server] TCP host successfuly started ");
+            Console.WriteLine("[Server] TCP host successfuly started");
 
             _exitEvent.WaitOne();
         }
@@ -63,19 +61,19 @@ namespace AutoCopmlete.Host
         {
             if (args.Length != 2)
             {
-                Console.WriteLine("Should be two input arguments");
+                Console.WriteLine("[Server] Should be two input arguments");
                 return false;
             }
 
             _path = args[0];
             if (!File.Exists(_path))
             {
-                Console.WriteLine("Specified dictionary path did not exists");
+                Console.WriteLine("[Server] Specified dictionary path did not exists");
             }
 
             if (!int.TryParse(args[1], out _port))
             {
-                Console.WriteLine("Incorrect format of second argument");
+                Console.WriteLine("[Server] Incorrect format of second argument");
                 return false;
             }
 
@@ -116,7 +114,7 @@ namespace AutoCopmlete.Host
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Unexcpected exception: " + ex.Message);
+                Console.WriteLine("[Server] Unexcpected exception: " + ex.Message);
                 _exitEvent.Set();
             }
         }
@@ -140,7 +138,7 @@ namespace AutoCopmlete.Host
                         {
                             var byteCount = await networkStream.ReadAsync(buffer, 0, buffer.Length);
 
-                            if (byteCount == 0)
+                            if (byteCount == 0) // при штатной остановке клиента в поток приходит 0 байт. Фиксируем факт отключения клиента
                             {
                                 Console.WriteLine("[Server] Client has been disconected");
                                 break;
@@ -152,9 +150,13 @@ namespace AutoCopmlete.Host
                     }
                 }
             }
-            catch (Exception ex)
+            catch (IOException) //при нештатной остановке клиента при вызове метода networkStream.ReadAsync получаем IOException. Фиксируем факт отключения клиента
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine("[Server] Client has been disconected");
+            }
+            catch (Exception ex) // Проблем с одним клиентов не должны приводить к падению сервера. Просто фиксируем факт ошибки в логе
+            {
+                Console.WriteLine("[Server] " + ex.Message);
             }
         }
 
