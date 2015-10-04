@@ -62,7 +62,7 @@ namespace AutoComplete
         /// <returns></returns>
         public IEnumerable<string> Get(string substring)
         {
-            if (string.IsNullOrEmpty(substring))
+            if (string.IsNullOrEmpty(substring) || substring.Length > 15)
                 throw new ArgumentException("Incorrect input substring");
 
             string lowwerString = substring.ToLower();

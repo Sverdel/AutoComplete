@@ -154,6 +154,33 @@ namespace AutoComplete.Tests
             {
                 StreamWriter writer = new StreamWriter(stream);
                 writer.WriteLine("5");
+                writer.Flush();
+
+                stream.Position = 0;
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    try
+                    {
+                        var result = TrieLoader.LoadAsync(reader).Result;
+                    }
+                    catch (AggregateException ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
+            }
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TrieLoaderTest_TooMuchWordsCount()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine("100001");
                 writer.WriteLine("test 10");
                 writer.Flush();
 
@@ -173,5 +200,111 @@ namespace AutoComplete.Tests
             }
         }
 
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TrieLoaderTest_TooLessWordsCount()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine("0");
+                writer.Flush();
+
+                stream.Position = 0;
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    try
+                    {
+                        var result = TrieLoader.LoadAsync(reader).Result;
+                    }
+                    catch (AggregateException ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TrieLoaderTest_TooBigOccurrence()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine("1");
+                writer.WriteLine("test 1000001");
+                writer.Flush();
+
+                stream.Position = 0;
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    try
+                    {
+                        var result = TrieLoader.LoadAsync(reader).Result;
+                    }
+                    catch (AggregateException ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TrieLoaderTest_TooLessOccurrence()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine("1");
+                writer.WriteLine("test 0");
+                writer.Flush();
+
+                stream.Position = 0;
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    try
+                    {
+                        var result = TrieLoader.LoadAsync(reader).Result;
+                    }
+                    catch (AggregateException ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
+            }
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TrieLoaderTest_TooLongWord()
+        {
+            using (MemoryStream stream = new MemoryStream())
+            {
+                StreamWriter writer = new StreamWriter(stream);
+                writer.WriteLine("1");
+                writer.WriteLine("veryverylongword 10");
+                writer.Flush();
+
+                stream.Position = 0;
+
+                using (StreamReader reader = new StreamReader(stream))
+                {
+                    try
+                    {
+                        var result = TrieLoader.LoadAsync(reader).Result;
+                    }
+                    catch (AggregateException ex)
+                    {
+                        throw ex.InnerException;
+                    }
+                }
+            }
+        }
     }
 }

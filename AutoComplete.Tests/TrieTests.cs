@@ -103,6 +103,14 @@ namespace AutoComplete.Tests
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void GetTest_TooLongWord()
+        {
+            Trie dictioanry = new Trie();
+            dictioanry.Get("veryverylongword");
+        }
+
+        [TestMethod]
         public void GetTest_Null()
         {
             Trie dictioanry = new Trie();
