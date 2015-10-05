@@ -64,6 +64,14 @@ namespace AutoComplete.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
+        public void TrieAddTest_NumberWord()
+        {
+            Trie dictioanry = new Trie();
+            dictioanry.Add("1", 100);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
         public void TrieAddTest_LessZero()
         {
             Trie dictioanry = new Trie();

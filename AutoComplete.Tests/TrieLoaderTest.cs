@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace AutoComplete.Tests
 {
@@ -9,7 +10,7 @@ namespace AutoComplete.Tests
     public class TrieLoaderTest
     {
         [TestMethod]
-        public void LoadTest()
+        public async Task LoadTest()
         {
             Stopwatch sw = Stopwatch.StartNew();
             int found = 0, notfound = 0;
@@ -22,7 +23,7 @@ namespace AutoComplete.Tests
                     long stopBytes = 0;
 
                     long startBytes = GC.GetTotalMemory(true);
-                    var result = TrieLoader.LoadAsync(reader).Result;
+                    var result = await TrieLoader.LoadAsync(reader);
                     stopBytes = GC.GetTotalMemory(true);
 
                     Console.WriteLine("Size is " + ((long)(stopBytes - startBytes)).ToString());
@@ -31,7 +32,7 @@ namespace AutoComplete.Tests
                     int count = 0;
 
                     count = int.Parse(currentLine);
-                    
+
                     for (int i = 0; i < count; i++)
                     {
                         currentLine = reader.ReadLine();
@@ -59,43 +60,28 @@ namespace AutoComplete.Tests
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void TrieLoaderTest_NullStream()
+        public async Task TrieLoaderTest_NullStream()
         {
-            try
-            {
-                var result = TrieLoader.LoadAsync(null).Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw ex.InnerException;
-            }
+            await TrieLoader.LoadAsync(null);
         }
 
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void TrieLoaderTest_EndStream()
+        public async Task TrieLoaderTest_EndStream()
         {
             using (MemoryStream stream = new MemoryStream())
             {
                 using (StreamReader reader = new StreamReader(stream))
                 {
                     reader.ReadToEnd();
-
-                    try
-                    {
-                        var result = TrieLoader.LoadAsync(reader).Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    await TrieLoader.LoadAsync(reader);
                 }
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void TrieLoaderTest_IncorrectFirstRow()
+        public async Task TrieLoaderTest_IncorrectFirstRow()
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -107,21 +93,14 @@ namespace AutoComplete.Tests
 
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    try
-                    {
-                        var result = TrieLoader.LoadAsync(reader).Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    await TrieLoader.LoadAsync(reader);
                 }
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void TrieLoaderTest_IncorrectWordRow()
+        public async Task TrieLoaderTest_IncorrectWordRow()
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -134,21 +113,14 @@ namespace AutoComplete.Tests
 
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    try
-                    {
-                        var result = TrieLoader.LoadAsync(reader).Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    await TrieLoader.LoadAsync(reader);
                 }
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void TrieLoaderTest_TooLessLines()
+        public async Task TrieLoaderTest_TooLessLines()
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -160,14 +132,7 @@ namespace AutoComplete.Tests
 
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    try
-                    {
-                        var result = TrieLoader.LoadAsync(reader).Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    await TrieLoader.LoadAsync(reader);
                 }
             }
         }
@@ -175,7 +140,7 @@ namespace AutoComplete.Tests
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void TrieLoaderTest_TooMuchWordsCount()
+        public async Task TrieLoaderTest_TooMuchWordsCount()
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -188,21 +153,14 @@ namespace AutoComplete.Tests
 
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    try
-                    {
-                        var result = TrieLoader.LoadAsync(reader).Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    await TrieLoader.LoadAsync(reader);
                 }
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void TrieLoaderTest_TooLessWordsCount()
+        public async Task TrieLoaderTest_TooLessWordsCount()
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -214,21 +172,14 @@ namespace AutoComplete.Tests
 
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    try
-                    {
-                        var result = TrieLoader.LoadAsync(reader).Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    await TrieLoader.LoadAsync(reader);
                 }
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void TrieLoaderTest_TooBigOccurrence()
+        public async Task TrieLoaderTest_TooBigOccurrence()
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -241,21 +192,14 @@ namespace AutoComplete.Tests
 
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    try
-                    {
-                        var result = TrieLoader.LoadAsync(reader).Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    await TrieLoader.LoadAsync(reader);
                 }
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void TrieLoaderTest_TooLessOccurrence()
+        public async Task TrieLoaderTest_TooLessOccurrence()
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -268,21 +212,14 @@ namespace AutoComplete.Tests
 
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    try
-                    {
-                        var result = TrieLoader.LoadAsync(reader).Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    await TrieLoader.LoadAsync(reader);
                 }
             }
         }
 
         [TestMethod]
         [ExpectedException(typeof(FormatException))]
-        public void TrieLoaderTest_TooLongWord()
+        public async Task TrieLoaderTest_TooLongWord()
         {
             using (MemoryStream stream = new MemoryStream())
             {
@@ -295,14 +232,8 @@ namespace AutoComplete.Tests
 
                 using (StreamReader reader = new StreamReader(stream))
                 {
-                    try
-                    {
-                        var result = TrieLoader.LoadAsync(reader).Result;
-                    }
-                    catch (AggregateException ex)
-                    {
-                        throw ex.InnerException;
-                    }
+                    await TrieLoader.LoadAsync(reader);
+
                 }
             }
         }

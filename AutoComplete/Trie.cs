@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("AutoComplete.Tests")]
@@ -27,16 +28,16 @@ namespace AutoComplete
             if (string.IsNullOrEmpty(word))
                 throw new ArgumentNullException("Incorrect input word");
 
-            if (word.ToLower() != word)
-                throw new ArgumentException("Word must be in lowwer case");
+            if (word.ToLower() != word || word.Any(x => !char.IsLetter(x)))
+                throw new ArgumentException("Word must contains only letters and be in lowwer case");
 
             if (occurrence <= 0)
                 throw new ArgumentException("Occurrence bust greater than 0");
-
-
+            
             TrieNode current = _root;
             foreach (char keyPart in word)
             {
+
                 if (!current.Leaves.ContainsKey(keyPart))
                 {
                     current.Leaves.Add(keyPart, new TrieNode());
@@ -45,9 +46,7 @@ namespace AutoComplete
                 current = current.Leaves[keyPart];
 
                 if (current.CurrentWord == word)
-                {
                     throw new ArgumentException("Current word is already exists");
-                }
 
                 current.AddWord(word, occurrence);
             }
